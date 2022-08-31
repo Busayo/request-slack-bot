@@ -45,7 +45,7 @@ func createTitleBlock() *slack.InputBlock {
 }
 
 
-// VM provider block data
+// Category  block data
 const CategoryBlockId = "category"
 const CategoryActionId = "CATEGORY"
 
@@ -59,7 +59,7 @@ func createCategoryOptions() []*slack.OptionBlockObject {
 }
 
 func createCategoryBlock() *slack.InputBlock {
-	providerInput := slack.NewInputBlock(
+	categoryInput := slack.NewInputBlock(
 		CategoryBlockId,
 		slack.NewTextBlockObject(
 			slack.PlainTextType,
@@ -80,8 +80,8 @@ func createCategoryBlock() *slack.InputBlock {
 			createCategoryOptions()...,
 		),
 	)
-	providerInput.DispatchAction = true //not sure what this does
-	return providerInput //not sure what this does
+	categoryInput.DispatchAction = true 
+	return categoryInput 
 }
 
 // Description block data
@@ -123,7 +123,7 @@ func BuildVMRequestModal2() slack.ModalViewRequest {
 	headerSection2 := createHeader2()
 	// Name input
 	titleBlock := createTitleBlock()
-	// Provider input
+	// Category input
 	categoryBlock := createCategoryBlock()
 	// Description input
 	requestDescriptionBlock := createRequestDescriptionBlock()
