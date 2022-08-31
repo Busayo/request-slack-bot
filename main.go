@@ -7,6 +7,7 @@ import (
 
 	"github.com/request-slack-bot/configs"
 	"github.com/request-slack-bot/pkg/utils"
+	"github.com/request-slack-bot/pkg/vms"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	log "github.com/sirupsen/logrus"
@@ -49,19 +50,41 @@ func Handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 				StatusCode: http.StatusInternalServerError,
 			}, err
 		}
-
+		api := slack.New(token)
 
 		// Build modal
+		modalRequest := vms.BuildVMRequestModal()
+
+
+		if _, err := api.OpenView(slashCMD.TriggerID, modalRequest); err != nil { // Show modal
+			log.Error(err)
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusInternalServerError,
+			}, err
+		}
 
 	
 	} else if slashCMD.Command == "/request"{
+		token, err := configs.GetBotToken()
 		if err != nil {
 			log.Error(err)
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
 			}, err
 		}
-				
+		api := slack.New(token)
+
+		// Build modal
+		modalRequest := vms.BuildVMRequestModal()
+
+
+		if _, err := api.OpenView(slashCMD.TriggerID, modalRequest); err != nil { // Show modal
+			log.Error(err)
+			return events.APIGatewayProxyResponse{
+				StatusCode: http.StatusInternalServerError,
+			}, err
+		}
+
 	
 	}else { // Wrong command
 		err := fmt.Errorf("invalid command executed. expected \"/request-vm\" but got %s", slashCMD.Command)
