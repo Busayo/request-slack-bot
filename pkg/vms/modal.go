@@ -35,7 +35,7 @@ func createNameBlock() *slack.InputBlock {
 		),
 		slack.NewTextBlockObject(
 			slack.PlainTextType,
-			"Hint",
+			"Project Name",
 			false,
 			false,
 		),
@@ -67,7 +67,7 @@ func createDescriptionBlock() *slack.InputBlock {
 		),
 		slack.NewTextBlockObject(
 			slack.PlainTextType,
-			"Why don't you need this VM?",
+			"Why do you need this VM?",
 			false,
 			false,
 		),
@@ -91,7 +91,7 @@ func createSSHKeyBlock() *slack.InputBlock {
 		),
 		slack.NewTextBlockObject(
 			slack.PlainTextType,
-			"Not so Public SSH Key",
+			"Public SSH Key",
 			false,
 			false,
 		),
@@ -106,7 +106,7 @@ func createSSHKeyExplanationBlock() *slack.SectionBlock {
 	return slack.NewSectionBlock(
 		slack.NewTextBlockObject(
 			slack.MarkdownType,
-			"I am lost _For How to create a Public SSH Key or other details read <https://www.linode.com/docs/guides/use-public-key-authentication-with-ssh/#public-key-authentication-on-linux-and-macos|here>_",
+			"_For How to create a Public SSH Key or other details read <https://www.linode.com/docs/guides/use-public-key-authentication-with-ssh/#public-key-authentication-on-linux-and-macos|here>_",
 			false,
 			false,
 		),
@@ -236,3 +236,5 @@ func BuildVMRequestModal() slack.ModalViewRequest {
 	modalRequest.Blocks = blocks
 	return modalRequest
 }
+
+
