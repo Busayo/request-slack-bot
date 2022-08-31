@@ -74,8 +74,10 @@ func Handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 		}
 		api := slack.New(token)
 
+
+		
 		// Build modal
-		modalRequest := vms.BuildVMRequestModal()
+		modalRequest := vms.BuildVMRequestModal2()
 
 
 		if _, err := api.OpenView(slashCMD.TriggerID, modalRequest); err != nil { // Show modal
@@ -106,6 +108,10 @@ func buildSlashCommand(event events.APIGatewayProxyRequest) (slack.SlashCommand,
 	}
 	return slack.SlashCommandParse(r)
 }
+
+
+
+
 
 func main() {
 	lambda.Start(Handler)
