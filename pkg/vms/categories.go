@@ -7,22 +7,22 @@ type Categories struct {
 
 var Category1 = Categories{
 	Name:  "2FA",
-	Value: "2FA",
+	Value: "2fa",
 }
 
 var Category2 = Categories{
 	Name:  "New Infrastructure",
-	Value: "New Infrastructure",
+	Value: "new infrastructure",
 }
 
 var Category3 = Categories{
 	Name:  "Permissions",
-	Value: "Permissions",
+	Value: "permissions",
 }
 
 var Category4 = Categories{
 	Name:  "Others",
-	Value: "Others",
+	Value: "others",
 }
 
 var SupportedCategories = [...]Categories{

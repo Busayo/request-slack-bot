@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/request-slack-bot/configs"
-	"github.com/request-slack-bot/pkg/utils"
-	"github.com/request-slack-bot/pkg/vms"
+	"github.com/request-slack-bot/configs"  //change back to right links
+	"github.com/request-slack-bot/pkg/utils" //change back to right links
+	"github.com/request-slack-bot/pkg/vms"  //change back to right links
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	log "github.com/sirupsen/logrus"
@@ -89,7 +89,7 @@ func Handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 
 	
 	}else { // Wrong command
-		err := fmt.Errorf("invalid command executed. expected \"/request-vm\" but got %s", slashCMD.Command)
+		err := fmt.Errorf("invalid command executed. expected \"/request-vm\" or \"/request\" but got %s", slashCMD.Command)
 		log.Error(err)
 		return events.APIGatewayProxyResponse{
 			StatusCode: http.StatusInternalServerError,
@@ -108,7 +108,6 @@ func buildSlashCommand(event events.APIGatewayProxyRequest) (slack.SlashCommand,
 	}
 	return slack.SlashCommandParse(r)
 }
-
 
 
 

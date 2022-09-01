@@ -114,6 +114,46 @@ func createRequestDescriptionBlock() *slack.InputBlock {
 
 
 
+// Category  block data
+const UrgencyBlockId = "urgency"
+const UrgencyActionId = "URGENCY"
+
+func createUrgencyOptions() []*slack.OptionBlockObject {
+	optionBlockObjects := make([]*slack.OptionBlockObject, 0, len(SupportedUrgency))
+	for _, option := range SupportedUrgency {
+		optionText := slack.NewTextBlockObject(slack.PlainTextType, option.Name, false, false)
+		optionBlockObjects = append(optionBlockObjects, slack.NewOptionBlockObject(option.Value, optionText, nil))
+	}
+	return optionBlockObjects
+}
+
+func createUrgencyBlock() *slack.InputBlock {
+	urgencyInput := slack.NewInputBlock(
+		UrgencyBlockId,
+		slack.NewTextBlockObject(
+			slack.PlainTextType,
+			"Urgency",
+			false,
+			false,
+		),
+		slack.NewTextBlockObject(
+			slack.PlainTextType,
+			"Urgency",
+			false,
+			false,
+		),
+		slack.NewOptionsSelectBlockElement(
+			slack.OptTypeStatic,
+			nil,
+			UrgencyActionId,
+			createUrgencyOptions()...,
+		),
+	)
+	urgencyInput.DispatchAction = true 
+	return urgencyInput 
+}
+
+
 func BuildVMRequestModal2() slack.ModalViewRequest {
 	// Modal texts
 	titleText := slack.NewTextBlockObject(slack.PlainTextType, "Angkor Request", false, false)
@@ -127,6 +167,8 @@ func BuildVMRequestModal2() slack.ModalViewRequest {
 	categoryBlock := createCategoryBlock()
 	// Description input
 	requestDescriptionBlock := createRequestDescriptionBlock()
+	// Urgency input
+	requestUrgencyBlock := createUrgencyBlock()
 
 
 
@@ -138,7 +180,8 @@ func BuildVMRequestModal2() slack.ModalViewRequest {
 			titleBlock,
 			categoryBlock,
 			requestDescriptionBlock,
-
+			requestUrgencyBlock,
+			slack.NewDividerBlock(),
 		},
 	}
 	// Modal

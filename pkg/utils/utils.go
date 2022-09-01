@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/request-slack-bot/configs"
+	"github.com/request-slack-bot/configs" //change this to right file path when merging - this checks out
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/awslabs/aws-lambda-go-api-proxy/httpadapter"
 	log "github.com/sirupsen/logrus"
