@@ -21,5 +21,5 @@ func GetSigningSecret() (string, error) {
 	return signingSecret, nil
 }
 
-
+// minus the extra lines that are unneeded here but needed in the main program, this checks out.
 
