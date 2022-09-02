@@ -5,6 +5,8 @@ import (
 	"github.com/slack-go/slack"
 )
 
+const RequestModalCallbackId = "general-request-modal"
+
 func createHeader2() *slack.SectionBlock {
 	return slack.NewSectionBlock(
 		slack.NewTextBlockObject(
@@ -156,9 +158,9 @@ func createUrgencyBlock() *slack.InputBlock {
 
 func BuildVMRequestModal2() slack.ModalViewRequest {
 	// Modal texts
-	titleText := slack.NewTextBlockObject(slack.PlainTextType, "Angkor Request", false, false)
-	closeText := slack.NewTextBlockObject(slack.PlainTextType, "Cancel", false, false)
-	submitText := slack.NewTextBlockObject(slack.PlainTextType, "Submit", false, false)
+	titleText2 := slack.NewTextBlockObject(slack.PlainTextType, "Angkor Request", false, false)
+	closeText2 := slack.NewTextBlockObject(slack.PlainTextType, "Cancel", false, false)
+	submitText2 := slack.NewTextBlockObject(slack.PlainTextType, "Submit", false, false)
 	// Header section
 	headerSection2 := createHeader2()
 	// Name input
@@ -173,7 +175,7 @@ func BuildVMRequestModal2() slack.ModalViewRequest {
 
 
 	// Blocks
-	blocks := slack.Blocks{
+	blocks2 := slack.Blocks{
 		BlockSet: []slack.Block{
 			headerSection2,
 			slack.NewDividerBlock(),
@@ -188,9 +190,9 @@ func BuildVMRequestModal2() slack.ModalViewRequest {
 	var modalRequest slack.ModalViewRequest
 	modalRequest.CallbackID = RequestModalCallbackId
 	modalRequest.Type = slack.ViewType("modal")
-	modalRequest.Title = titleText
-	modalRequest.Close = closeText
-	modalRequest.Submit = submitText
-	modalRequest.Blocks = blocks
+	modalRequest.Title = titleText2
+	modalRequest.Close = closeText2
+	modalRequest.Submit = submitText2
+	modalRequest.Blocks = blocks2
 	return modalRequest
 }
