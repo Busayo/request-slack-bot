@@ -6,8 +6,9 @@ import (
 	"net/http"
 
 	"github.com/request-slack-bot/configs"  //change back to right links
+	"github.com/request-slack-bot/pkg/generalrequests"
 	"github.com/request-slack-bot/pkg/utils" //change back to right links
-	"github.com/request-slack-bot/pkg/vms"  //change back to right links
+  "github.com/request-slack-bot/pkg/vms"  //change back to right links
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
 	log "github.com/sirupsen/logrus"
@@ -77,10 +78,10 @@ func Handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 
 		
 		// Build modal
-		modalRequest := vms.BuildVMRequestModal2()
+		modalRequest2 := generalrequests.BuildVMRequestModal2()
 
 
-		if _, err := api.OpenView(slashCMD.TriggerID, modalRequest); err != nil { // Show modal
+		if _, err := api.OpenView(slashCMD.TriggerID, modalRequest2); err != nil { // Show modal
 			log.Error(err)
 			return events.APIGatewayProxyResponse{
 				StatusCode: http.StatusInternalServerError,
