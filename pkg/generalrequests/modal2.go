@@ -1,11 +1,11 @@
-package vms
+package generalrequests
 
 import (
 
 	"github.com/slack-go/slack"
 )
 
-const RequestModalCallbackId = "general-request-modal"
+const RequestModalCallbackId2 = "general-request-modal"
 
 func createHeader2() *slack.SectionBlock {
 	return slack.NewSectionBlock(
@@ -156,7 +156,7 @@ func createUrgencyBlock() *slack.InputBlock {
 }
 
 
-func BuildVMRequestModal2() slack.ModalViewRequest {
+func BuildGeneralRequestModal() slack.ModalViewRequest {
 	// Modal texts
 	titleText2 := slack.NewTextBlockObject(slack.PlainTextType, "Angkor Request", false, false)
 	closeText2 := slack.NewTextBlockObject(slack.PlainTextType, "Cancel", false, false)
@@ -188,7 +188,7 @@ func BuildVMRequestModal2() slack.ModalViewRequest {
 	}
 	// Modal
 	var modalRequest slack.ModalViewRequest
-	modalRequest.CallbackID = RequestModalCallbackId
+	modalRequest.CallbackID = RequestModalCallbackId2
 	modalRequest.Type = slack.ViewType("modal")
 	modalRequest.Title = titleText2
 	modalRequest.Close = closeText2
