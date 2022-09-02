@@ -1,4 +1,4 @@
-package vms
+package generalrequests
 
 type Urgency struct {
 	Name  string

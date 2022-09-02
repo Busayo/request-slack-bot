@@ -1,4 +1,4 @@
-package vms
+package generalrequests
 
 type Categories struct {
 	Name  string

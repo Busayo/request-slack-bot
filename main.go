@@ -78,7 +78,7 @@ func Handler(ctx context.Context, event events.APIGatewayProxyRequest) (events.A
 
 		
 		// Build modal
-		modalRequest2 := generalrequests.BuildVMRequestModal2()
+		modalRequest2 := generalrequests.BuildGeneralRequestModal()
 
 
 		if _, err := api.OpenView(slashCMD.TriggerID, modalRequest2); err != nil { // Show modal
