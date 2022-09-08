@@ -1,13 +1,14 @@
 package generalrequests
 
 import (
+	"fmt"
 
 	"github.com/slack-go/slack"
 )
 
-const RequestModalCallbackId2 = "general-request-modal"
+const GeneralRequestModalCallbackId = "general-request-modal"
 
-func createHeader2() *slack.SectionBlock {
+func createHeader() *slack.SectionBlock {
 	return slack.NewSectionBlock(
 		slack.NewTextBlockObject(
 			slack.MarkdownType,
@@ -21,8 +22,8 @@ func createHeader2() *slack.SectionBlock {
 }
 
 // Title block data
-const TitleBlockId = "title_name"
-const TitleActionId = "TITLE_NAME"
+const TitleBlockId = "general_request_title_name"
+const TitleActionId = "GENERAL_REQUEST_TITLE_NAME"
 
 func createTitleBlock() *slack.InputBlock {
 	return slack.NewInputBlock(
@@ -42,14 +43,13 @@ func createTitleBlock() *slack.InputBlock {
 		slack.NewPlainTextInputBlockElement(
 			nil,
 			TitleActionId,
-		), 
+		),
 	)
 }
 
-
 // Category  block data
-const CategoryBlockId = "category"
-const CategoryActionId = "CATEGORY"
+const CategoryBlockId = "general_request_category"
+const CategoryActionId = "GENERAL_REQUEST_CATEGORY"
 
 func createCategoryOptions() []*slack.OptionBlockObject {
 	optionBlockObjects := make([]*slack.OptionBlockObject, 0, len(SupportedCategories))
@@ -82,13 +82,13 @@ func createCategoryBlock() *slack.InputBlock {
 			createCategoryOptions()...,
 		),
 	)
-	categoryInput.DispatchAction = true 
-	return categoryInput 
+	categoryInput.DispatchAction = true
+	return categoryInput
 }
 
 // Description block data
-const RequestDescriptionBlockId = "request_desc"
-const RequestDescriptionActionId = "REQUEST_DESC"
+const RequestDescriptionBlockId = "general_request_desc"
+const RequestDescriptionActionId = "GENERAL_REQUEST_DESC"
 
 func createRequestDescriptionBlock() *slack.InputBlock {
 	textInputBlock := slack.NewPlainTextInputBlockElement(
@@ -114,11 +114,9 @@ func createRequestDescriptionBlock() *slack.InputBlock {
 	)
 }
 
-
-
 // Category  block data
-const UrgencyBlockId = "urgency"
-const UrgencyActionId = "URGENCY"
+const UrgencyBlockId = "general_request_urgency"
+const UrgencyActionId = "general_request_URGENCY"
 
 func createUrgencyOptions() []*slack.OptionBlockObject {
 	optionBlockObjects := make([]*slack.OptionBlockObject, 0, len(SupportedUrgency))
@@ -151,18 +149,17 @@ func createUrgencyBlock() *slack.InputBlock {
 			createUrgencyOptions()...,
 		),
 	)
-	urgencyInput.DispatchAction = true 
-	return urgencyInput 
+	urgencyInput.DispatchAction = true
+	return urgencyInput
 }
-
 
 func BuildGeneralRequestModal() slack.ModalViewRequest {
 	// Modal texts
-	titleText2 := slack.NewTextBlockObject(slack.PlainTextType, "Angkor Request", false, false)
-	closeText2 := slack.NewTextBlockObject(slack.PlainTextType, "Cancel", false, false)
-	submitText2 := slack.NewTextBlockObject(slack.PlainTextType, "Submit", false, false)
+	titleText := slack.NewTextBlockObject(slack.PlainTextType, "Angkor Request", false, false)
+	closeText := slack.NewTextBlockObject(slack.PlainTextType, "Cancel", false, false)
+	submitText := slack.NewTextBlockObject(slack.PlainTextType, "Submit", false, false)
 	// Header section
-	headerSection2 := createHeader2()
+	headerSection := createHeader()
 	// Name input
 	titleBlock := createTitleBlock()
 	// Category input
@@ -172,12 +169,10 @@ func BuildGeneralRequestModal() slack.ModalViewRequest {
 	// Urgency input
 	requestUrgencyBlock := createUrgencyBlock()
 
-
-
 	// Blocks
-	blocks2 := slack.Blocks{
+	blocks := slack.Blocks{
 		BlockSet: []slack.Block{
-			headerSection2,
+			headerSection,
 			slack.NewDividerBlock(),
 			titleBlock,
 			categoryBlock,
@@ -188,11 +183,71 @@ func BuildGeneralRequestModal() slack.ModalViewRequest {
 	}
 	// Modal
 	var modalRequest slack.ModalViewRequest
-	modalRequest.CallbackID = RequestModalCallbackId2
+	modalRequest.CallbackID = GeneralRequestModalCallbackId
 	modalRequest.Type = slack.ViewType("modal")
-	modalRequest.Title = titleText2
-	modalRequest.Close = closeText2
-	modalRequest.Submit = submitText2
-	modalRequest.Blocks = blocks2
+	modalRequest.Title = titleText
+	modalRequest.Close = closeText
+	modalRequest.Submit = submitText
+	modalRequest.Blocks = blocks
 	return modalRequest
+}
+
+// const DefaultBotTag = "slack-bot-generalrequest"
+
+func NewGeneralRequestFromModal(i slack.InteractionCallback) (GeneralRequest, []ModalError) {
+	stateValues := i.View.State.Values
+
+	title := stateValues[TitleBlockId][TitleActionId].Value
+
+	category := stateValues[CategoryBlockId][CategoryActionId].SelectedOption.Value
+
+	description := stateValues[RequestDescriptionBlockId][RequestDescriptionActionId].Value
+
+	urgency := stateValues[UrgencyBlockId][UrgencyActionId].SelectedOption.Value
+
+	data := GeneralRequest{
+		Requester:   i.User.ID,
+		Title:       title,
+		Category:    category,
+		Description: description,
+		Urgency:     urgency,
+	}
+
+	errs := validateRequest(data)
+	return data, errs
+}
+
+type ModalError struct {
+	BlockID string
+	Err     error
+	ErrMsg  string
+}
+
+func validateRequest(data GeneralRequest) []ModalError {
+	errs := make([]ModalError, 0, 10)
+
+	check := func(value, blockId, errMsg string) {
+		if value == "" {
+			errs = append(errs, ModalError{
+				BlockID: blockId,
+				Err:     fmt.Errorf(errMsg),
+				ErrMsg:  errMsg,
+			})
+		}
+	}
+	toCheck := []struct {
+		value   string
+		blockId string
+		errMsg  string
+	}{
+		{data.Title, TitleBlockId, "Missing Title!"},
+		{data.Category, CategoryBlockId, "Missing Category!"},
+		{data.Description, RequestDescriptionBlockId, "Missing Description!"},
+		{data.Urgency, UrgencyBlockId, "Missing Urgency!"},
+	}
+
+	for _, checkData := range toCheck {
+		check(checkData.value, checkData.blockId, checkData.errMsg)
+	}
+	return errs
 }
