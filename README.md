@@ -22,4 +22,4 @@ Go back to AWS Lambda and upload your zipped file to the code editor. Change the
 
 Then go back to Slack to test your slash command. If all works well, you should have a modal that takes in requests.
 
-The interaction for the modal will be added later on.
+
